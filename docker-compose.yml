@@ -1,0 +1,32 @@
+version: "3.5"
+networks:
+  default:
+    name: replication
+    ipam:
+      config:
+        - subnet: 172.25.0.0/24
+services:
+ master:
+  build: ./master
+  #  volumes:
+  # - ./pg_data:/var/lib/postgresql/data
+  environment:
+   - POSTGRES_USER=hamed
+   - POSTGRES_PASSWORD=123456
+   - POSTGRES_DB=hamed
+   - PG_REP_USER=rep
+   - PG_REP_PASSWORD=123456
+  networks:
+    default:
+      ipv4_address: 172.25.0.12
+ slave:
+  build: ./slave
+  environment:
+   - POSTGRES_USER=hamed
+   - POSTGRES_PASSWORD=123456
+   - POSTGRES_DB=hamed
+   - PG_REP_USER=rep
+   - PG_REP_PASSWORD=123456
+  networks:
+    default:
+      ipv4_address: 172.25.0.13
